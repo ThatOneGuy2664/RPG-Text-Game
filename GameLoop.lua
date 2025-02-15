@@ -1,6 +1,6 @@
 function processPlayerInput(input)
     if input == "look" then
-        print("You see a dark cave entrance ahead.")
+        customPrint("You see a dark cave entrance ahead.")
     elseif input == "help" then
         print("Available commands: look, move, attack, help")
     elseif input == "move" then

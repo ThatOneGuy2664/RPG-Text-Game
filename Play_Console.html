@@ -87,21 +87,43 @@
         `)();
 
         // Function to load and run an external Lua file
-        async function loadLuaScript(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`Failed to load ${url}: ${response.statusText}`);
+        function loadLuaScript(url) {
+            fetch(url)
+            .then(response => response.text())
+            .then(luaCode => {
+                console.log("Loaded Lua Code:\n", luaCode); // Debugging
 
-                const luaCode = await response.text();
-                fengari.load(luaCode)(); // Execute the Lua script
-                customPrint(`Loaded ${url} successfully!`);
-            } catch (error) {
-                customPrint(`Error: ${error.message}`);
-            }
+                // Run Lua script inside Fengari
+                const luaEnv = fengari.load(luaCode);
+                luaEnv();  // Execute script
+
+                // Check if processPlayerInput is registered
+                const luaGlobal = fengari.interop.getglobal("processPlayerInput");
+                if (!luaGlobal) {
+                    console.error("processPlayerInput is not defined in Lua!");
+                } else {
+                    console.log("Lua script loaded successfully!");
+                }
+            })
+            .catch(error => console.error("Error loading Lua script:", error));
         }
+
 
         // Run the Lua file when the page loads
         loadLuaScript("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-Text-Game/master/GameLoop.lua");
+
+        function processLuaInput(input) {
+            try {
+                const luaFunc = fengari.interop.getglobal("processPlayerInput");
+                if (luaFunc) {
+                    fengari.load(`processPlayerInput("${input}")`)();  // Run function inside Lua
+                } else {
+                    console.error("Error: processPlayerInput is not available in Lua.");
+                }
+            } catch (err) {
+                console.error("Error executing Lua function:", err);
+            }
+        }
 
 
         // Run when button is clicked
@@ -109,7 +131,7 @@
             const input = inputElement.value.trim();
             inputElement.value = "";  // Clear input box
             if (input) {
-                processLuaInput(input);  // Call Lua function from JS
+                _G.processPlayerInput(input);  // Call Lua function from JS
             }
         });
 

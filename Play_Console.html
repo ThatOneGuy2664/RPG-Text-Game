@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro RPG Console</title>
+    <script src="Fengari/fengari-web.js"></script>
+    <script src="vars.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #222;
+            color: #fff;
+        }
+        #consoleOutput {
+            background-color: #333;
+            border: 1px solid #444;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            white-space: pre-wrap;
+        }
+        #luaInput {
+            width: 100%;
+            background-color: #555;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 5px;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Retro RPG Console</h1>
+    <div id="consoleOutput">Welcome to the game!</div>
+    <textarea id="luaInput" placeholder="Type your input here..."></textarea>
+    <button id="runCommand">Submit</button>
+
+    <script>
+        const outputElement = document.getElementById("consoleOutput");
+        const inputElement = document.getElementById("luaInput");
+        const runButton = document.getElementById("runCommand");
+
+        // Custom Print Function (Redirects Lua print output)
+        function customPrint(...args) {
+            const message = args.map(arg => arg.toString()).join(" ");
+            const outputText = `<span style="color:white; display:block;">${message}</span>`; // Ensure line breaks
+            outputElement.innerHTML += outputText + "<br>"; // Add explicit newline
+            outputElement.scrollTop = outputElement.scrollHeight; // Auto-scroll to bottom
+        }
+
+        // Load Lua Environment
+        fengari.load(`
+            local js = require("js")
+            local window = js.global
+            local document = window.document
+
+            -- HTML Elements
+            local outputElement = document:getElementById("consoleOutput")
+
+            -- Override print function
+            function customPrint(...)
+                local args = {}
+                for i = 1, select("#", ...) do
+                    table.insert(args, tostring(select(i, ...)))
+                end
+                js.global:customPrint(table.concat(args, " "))
+            end
+            _G.print = customPrint  -- Redirect Lua print() to JS console
+
+            -- Handle Input
+            function processInput(input)
+                if input ~= "" then
+                    print("Player input: " .. input)  -- Will now appear in HTML console
+                    if _G.handlePlayerInput then
+                        _G.handlePlayerInput(input)
+                    else
+                        print("No input handler defined.")
+                    end
+                end
+            end
+
+            -- Expose function to JS
+            js.global.processLuaInput = processInput
+        `)();
+
+        // Function to load and run an external Lua file
+        async function loadLuaScript(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Failed to load ${url}: ${response.statusText}`);
+
+                const luaCode = await response.text();
+                fengari.load(luaCode)(); // Execute the Lua script
+                customPrint(`Loaded ${url} successfully!`, "lightgreen");
+            } catch (error) {
+                customPrint(`Error: ${error.message}`, "red");
+            }
+        }
+
+        // Run the Lua file when the page loads
+        loadLuaScript("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-text-game/main/Game/GameLoop.lua");
+
+
+        // Run when button is clicked
+        runButton.addEventListener("click", () => {
+            const input = inputElement.value.trim();
+            inputElement.value = "";  // Clear input box
+            if (input) {
+                processLuaInput(input);  // Call Lua function from JS
+            }
+        });
+
+        // Run when Enter is pressed
+        inputElement.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                runButton.click();
+            }
+        });
+
+    </script>
+
+</body>
+</html>

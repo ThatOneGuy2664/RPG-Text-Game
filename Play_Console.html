@@ -94,14 +94,14 @@
 
                 const luaCode = await response.text();
                 fengari.load(luaCode)(); // Execute the Lua script
-                customPrint(`Loaded ${url} successfully!`, "lightgreen");
+                customPrint(`Loaded ${url} successfully!`);
             } catch (error) {
-                customPrint(`Error: ${error.message}`, "red");
+                customPrint(`Error: ${error.message}`);
             }
         }
 
         // Run the Lua file when the page loads
-        loadLuaScript("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-text-game/main/Game/GameLoop.lua");
+        loadLuaScript("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-Text-Game/master/GameLoop.lua");
 
 
         // Run when button is clicked

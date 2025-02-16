@@ -75,12 +75,13 @@
         }
 
         function luaCustomPrint(L) {
-            const msg = to_jsstring(lua.lua_tolstring(L, 1)); // get the Lua string argument
-            console.log("Lua says:", msg); // debug log
-            customPrint(msg); // call JS customPrint
-            fengari.lua.lua_settop(L, 0);
-            fengari.lua.lua_pushnil(L);
-            return 1;  // Return one value (nil) to Lua
+            const msg = to_jsstring(lua.lua_tolstring(L, 1)); // get the argument
+            console.log("Lua says:", msg); // Debug log
+            customPrint(msg); // Call your JS print function
+
+            // Clear the entire Lua stack and push nil as the return value:
+            lua.lua_settop(L, 0);
+            return 0;  // Returning 1 value (nil) ensures the chunk returns nil.
         }
 
         // Bind function globally to _G table

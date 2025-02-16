@@ -13,7 +13,7 @@ end
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
 local function intro()
-    _G.customPrint("[green]Welcome to the game!")
+    do _G.customPrint("[green]Welcome to the game!")
 end
 
 intro()

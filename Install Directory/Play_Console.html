@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retro RPG Console</title>
     <script src="Fengari/fengari-web.js"></script>
-    <script src="vars.js"></script>
     <style>
         body {
             font-family: monospace;
@@ -47,29 +46,34 @@
         fengari.lualib.luaL_openlibs(L);
 
         function customPrint(...args) {
-            const colorMap = {
-                "RED": "red",
-                "BLUE": "blue",
-                "GREEN": "green",
-                "YELLOW": "yellow",
-                "WHITE": "white",
-                "CYAN": "cyan",
-                "MAGENTA": "magenta",
-                // Add more colors if needed
-            };
-
-            // Function to replace color tags with styled HTML
             const applyColorFormatting = (text) => {
-                return text.replace(/\[([A-Za-z]+)\](.*?)\[/g, (match, color, content) => {
-                    const colorStyle = colorMap[color.toUpperCase()] || "white"; // Default to white if no match
-                    return `<span style="color:${colorStyle}">${content}</span>`;
-                });
+                let formattedMessage = "";
+                let currentColor = "white";  // Default color
+
+                // Regular expression to find color tags
+                const colorTagRegex = /\[([A-Za-z]+)\](.*?)\[/g;
+                let match;
+
+                // Parse the text for color tags and apply formatting
+                while ((match = colorTagRegex.exec(text)) !== null) {
+                    const color = match[1].toUpperCase();  // The color name (e.g., 'RED')
+                    const content = match[2];  // The content to format
+
+                    // Apply the color to the content and append to the formatted message
+                    if (colorMap[color]) {
+                        currentColor = colorMap[color]; // Update the color for the next part
+                    }
+
+                    formattedMessage += `<span style="color:${currentColor}">${content}</span>`;  // Wrap the content in span with the correct color
+                }
+
+                return formattedMessage;
             };
 
             const message = args.map(arg => arg.toString()).join(" ");
             const formattedMessage = applyColorFormatting(message);
-            const outputText = `<span style="color:white; display:block;">${formattedMessage}</span>`;
-            outputElement.innerHTML += outputText; // Add explicit newline
+            const outputText = `<span style=display:block;">${formattedMessage}</span>`;
+            outputElement.innerHTML += outputText;
             outputElement.scrollTop = outputElement.scrollHeight; // Auto-scroll to bottom
         }
 

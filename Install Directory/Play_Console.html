@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro RPG Console</title>
+    <script src="Fengari/fengari-web.js"></script>
+    <script src="vars.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #222;
+            color: #fff;
+        }
+        #consoleOutput {
+            background-color: #333;
+            border: 1px solid #444;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            white-space: pre-wrap;
+        }
+        #luaInput {
+            width: 100%;
+            background-color: #555;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 5px;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Retro RPG Console</h1>
+    <div id="consoleOutput">Welcome to the game!</div>
+    <textarea id="luaInput" placeholder="Type your input here..."></textarea>
+    <button id="runCommand">Submit</button>
+
+    <script>
+        const outputElement = document.getElementById("consoleOutput");
+        const inputElement = document.getElementById("luaInput");
+        const runButton = document.getElementById("runCommand");
+
+        const L = fengari.lauxlib.luaL_newstate();
+        fengari.lualib.luaL_openlibs(L);
+
+        // Custom Print Function (Redirects Lua print output)
+        function customPrint(...args) {
+            const message = args.map(arg => arg.toString()).join(" ");
+            const outputText = `<span style="color:white; display:block;">${message}</span>`; // Ensure line breaks
+            outputElement.innerHTML += outputText + "<br>"; // Add explicit newline
+            outputElement.scrollTop = outputElement.scrollHeight; // Auto-scroll to bottom
+        }
+
+        // Function to load and run an external Lua file in the same Lua state (L)
+        function loadLuaScript(url) {
+            fetch(url)
+            .then(response => response.text())
+            .then(luaCode => {
+                console.log("Loaded Lua Code:\n", luaCode); // Debugging
+
+                // Run Lua script inside the existing Lua state (L)
+                const status = fengari.lauxlib.luaL_dostring(L, fengari.to_luastring(luaCode));
+
+                if (status !== 0) {
+                    console.error("Error executing Lua script:", fengari.lua.lua_tojsstring(L, -1));
+                }
+            })
+            .catch(error => console.error("Error loading Lua script:", error));
+        }
+
+        // Run the Lua game file when the page loads
+        loadLuaScript("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-Text-Game/master/GameLoop.lua");
+
+        //TODO fix print override
+        const luaPrintOverrideCode = `
+            local js = require("js")
+            local window = js.global
+            local document = window.document
+
+            if js == nil then
+                print("js module not available!")
+            else
+                print("js module loaded successfully!")
+            end
+
+            -- HTML Elements
+            local outputElement = document:getElementById("consoleOutput")
+
+            -- Override print function
+            function customPrint(...)
+                local args = {}
+                for i = 1, select("#", ...) do
+                    table.insert(args, tostring(select(i, ...)))
+                end
+                window:customPrint(table.concat(args, " "))
+            end
+            _G.print = customPrint  -- Redirect Lua print() to JS console
+        `;
+
+        fengari.lauxlib.luaL_dostring(L, fengari.to_luastring(luaPrintOverrideCode));
+
+
+        runButton.addEventListener("click", () => {
+            const input = inputElement.value.trim();
+
+            if (input) {
+                fengari.lua.lua_getglobal(L, "processPlayerInput"); // Push function onto Lua stack
+
+                if (!fengari.lua.lua_isfunction(L, -1)) {
+                    console.error("Error: processPlayerInput is not a function.");
+                } else {
+                    fengari.lua.lua_pushstring(L, inputElement.value); // Push argument
+                    inputElement.value = "";  // Clear input box
+                    if (fengari.lua.lua_pcall(L, 1, 1, 0) !== 0) {
+                        console.error("Error executing Lua function:", fengari.lua.lua_tojsstring(L, -1));
+                    } else {
+                        fengari.lua.lua_pop(L, 1); // Pop result
+                    }
+                }
+
+                // Call the Lua function directly (with no arguments)
+                fengari.lua.lua_call(L, 0, 1);  // Call with 0 arguments, expect 1 return value
+
+                // Get the return value from the Lua stack
+                const returnValue = fengari.lua.tojsstring(L, -1);
+                customPrint(returnValue);
+
+                // Pop the result from the Lua stack
+                fengari.lua.pop(L, 1);
+            }
+        });
+
+        // Run when Enter is pressed
+        inputElement.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                runButton.click();
+            }
+        });
+
+    </script>
+
+</body>
+</html>

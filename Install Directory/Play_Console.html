@@ -76,7 +76,7 @@
         }
 
         fengari.lua.lua_pushjsfunction(L, customPrint); // Push customPrint function onto the Lua stack
-        fengari.lua.lua_setglobal(L, to_luastring("customPrint")); // Store it in Lua's global table (_G)
+        fengari.lua.lua_setglobal(L, fengari.to_luastring("customPrint")); // Store it in Lua's global table (_G)
 
         // Function to load and run an external Lua file in the same Lua state (L)
         function loadLuaScript(url) {

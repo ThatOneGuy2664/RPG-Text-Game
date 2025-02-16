@@ -9,7 +9,7 @@ end
 
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
-local js = reqiure "js"
+local js = reqiure("js")
 
 function printToConsole(stringToPrint)
     js.global.customPrint(stringToPrint)

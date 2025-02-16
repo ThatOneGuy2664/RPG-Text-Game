@@ -1,4 +1,3 @@
-local lastInputString
 print("GameLoop.lua loaded successfully!")  -- Debug message
 
 function processPlayerInput(input)
@@ -19,6 +18,7 @@ end
 intro()
 
 --non-temp
+local lastInputString
 
 local player = {}
 player.gold = 0

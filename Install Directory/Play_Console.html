@@ -63,7 +63,7 @@
                 }
 
                 formattedMessage += text.slice(lastIndex);  // Append remaining text
-                return formattedMessage.replace(/\[\]/g, "</span>");  // Close spans for []
+                return formattedMessage.replace(/\[\]/g, "</span>");  // Close spans for [color]
             };
 
             const message = args.map(arg => arg.toString()).join(" ");
@@ -114,7 +114,7 @@
                     } else {
                         // Retrieve the return value from the Lua stack
                         const returnValue = fengari.lua.lua_tojsstring(L, -1);
-                        customPrint(returnValue);
+                        customPrint("[blue]> " + returnValue);
                         // Pop the result from the Lua stack
                         fengari.lua.lua_pop(L, 1);
                     }

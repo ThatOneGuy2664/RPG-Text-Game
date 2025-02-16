@@ -3,7 +3,7 @@ print("GameLoop.lua loaded successfully!")  -- Debug message
 
 function processPlayerInput(input)
     print("Player input received: " .. input)
-    lastInputString = input
+    lastInputString = input -- For later ifs and whatnot
     return input
 end
 
@@ -16,5 +16,5 @@ function printToConsole(stringToPrint)
 end
 
 local function intro()
-    printToConsole([green]Welcome to the game!)
+    printToConsole("[green]Welcome to the game!")
 end

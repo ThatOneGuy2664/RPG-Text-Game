@@ -45,8 +45,6 @@
         const L = fengari.lauxlib.luaL_newstate();
         fengari.lualib.luaL_openlibs(L);
 
-        const { lua, lauxlib, lualib, to_jsstring, to_luastring } = fengari;
-
         function customPrint(...args) {
             const applyColorFormatting = (text) => {
                 let formattedMessage = "";
@@ -77,10 +75,11 @@
         }
 
         function luaCustomPrint(L) {
-            const msg = to_jsstring(fengari.lua.lua_tojsstring(L, 1)); // Get Lua string argument
-            console.log("Lua says:", msg); // Debug log
-            customPrint(msg); // Call your existing function
-            return 0; // Return nothing to Lua
+            const msg = to_jsstring(lua.lua_tolstring(L, 1)); // get the Lua string argument
+            console.log("Lua says:", msg); // debug log
+            customPrint(msg); // call JS customPrint
+            lua.lua_pop(L, 1);
+            return 0;
         }
 
         // Bind function globally to _G table

@@ -5,7 +5,7 @@ function processPlayerInput(input)
     print("Player input received: " .. input)
     lastInputString = input -- For later ifs and whatnot
     if lastInputString == "tnt" then
-        customPrint("[red]boom")
+        _G.customPrint("[red]boom")
     end
     return input
 end
@@ -13,7 +13,15 @@ end
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
 local function intro()
-    customPrint("[green]Welcome to the game!")
+    _G.customPrint("[green]Welcome to the game!")
 end
 
 intro()
+
+local player = {}
+player.gold = 0
+player.xp = 0
+player.level = 1
+player.xpToLvlUp = player.level * 100
+player.inv = {}
+player.weight = {0, 20}

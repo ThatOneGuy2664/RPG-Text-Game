@@ -18,6 +18,8 @@ end
 
 intro()
 
+--non-temp
+
 local player = {}
 player.gold = 0
 player.xp = 0
@@ -25,5 +27,15 @@ player.level = 1
 player.xpToLvlUp = player.level * 100
 player.inv = {}
 player.weight = {0, 20}
+player.race = ""
+
+local function charCreate()
+    --TODO
+end
+
+local function gameLoop()
+    --TODO
+    gameLoop()
+end
 
 return nil -- Debugging

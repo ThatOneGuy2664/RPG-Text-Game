@@ -9,9 +9,9 @@ end
 
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
-local js = reqiure("js")
+local js = require("js")
 
-function printToConsole(stringToPrint)
+local function printToConsole(stringToPrint)
     js.global.customPrint(stringToPrint)
 end
 

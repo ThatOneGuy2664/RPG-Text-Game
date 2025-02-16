@@ -5,7 +5,7 @@ function processPlayerInput(input)
     print("Player input received: " .. input)
     lastInputString = input -- For later ifs and whatnot
     if lastInputString == "tnt" then
-        _G.customPrint("[red]boom")
+        customPrint("[red]boom")
     end
     return input
 end
@@ -13,7 +13,7 @@ end
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
 local function intro()
-    _G.customPrint("[green]Welcome to the game!")
+    customPrint("[green]Welcome to the game!")
 end
 
 intro()

@@ -46,10 +46,29 @@
         const L = fengari.lauxlib.luaL_newstate();
         fengari.lualib.luaL_openlibs(L);
 
-        // Custom Print Function (Redirects Lua print output)
         function customPrint(...args) {
+            const colorMap = {
+                "RED": "red",
+                "BLUE": "blue",
+                "GREEN": "green",
+                "YELLOW": "yellow",
+                "WHITE": "white",
+                "CYAN": "cyan",
+                "MAGENTA": "magenta",
+                // Add more colors if needed
+            };
+
+            // Function to replace color tags with styled HTML
+            const applyColorFormatting = (text) => {
+                return text.replace(/\[([A-Za-z]+)\](.*?)\[/g, (match, color, content) => {
+                    const colorStyle = colorMap[color.toUpperCase()] || "white"; // Default to white if no match
+                    return `<span style="color:${colorStyle}">${content}</span>`;
+                });
+            };
+
             const message = args.map(arg => arg.toString()).join(" ");
-            const outputText = `<span style="color:white; display:block;">${message}</span>`; // Ensure line breaks
+            const formattedMessage = applyColorFormatting(message);
+            const outputText = `<span style="color:white; display:block;">${formattedMessage}</span>`;
             outputElement.innerHTML += outputText; // Add explicit newline
             outputElement.scrollTop = outputElement.scrollHeight; // Auto-scroll to bottom
         }

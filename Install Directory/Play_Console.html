@@ -70,7 +70,6 @@
             const formattedMessage = applyColorFormatting(message);
             const outputText = `<br><span>${formattedMessage}</span>`;
 
-            console.log(outputText);
             outputElement.innerHTML += outputText;
             outputElement.scrollTop = outputElement.scrollHeight;
         }
@@ -82,8 +81,8 @@
             return 0; // Return nothing to Lua
         }
 
-        // Bind function globally to `_G`
-        fengari.lua.lua_pushjsfunction(L, luaCustomPrint);
+        // Bind function globally to _G table
+        fengari.lua.lua_pushcfunction(L, luaCustomPrint);
         fengari.lua.lua_setglobal(L, fengari.to_luastring("customPrint"));
 
         // Function to load and run an external Lua file in the same Lua state (L)

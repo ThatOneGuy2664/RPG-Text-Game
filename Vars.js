@@ -1,7 +1,7 @@
--- Copyright (c) 2024 ThatOneGuy2664 --
----------------------------------------
+// Copyright (c) 2024 ThatOneGuy2664 //
+//-----------------------------------//
 
-local Vars = {}
+window.Vars = {}
 
 Vars.Locations = {
   "Rockfair", "Bronzemond", "Freyacre",
@@ -22,19 +22,19 @@ Vars.Locations = {
 }
 
 Vars.Names = {
-  "Tarique", "Kai", "Hayden", "Charlet", "Tony", "Jim", "Anna", "Uzuri", "Priam", "Eldrin", 
-  "Vera", "Lorcan", "Seraphina", "Thalia", "Fenrir", "Marik", "Liora", "Jareth", "Kael", "Sylas", 
-  "Isolde", "Garrick", "Nalia", "Borin", "Elara", "Roderick", "Daria", "Joe", "Zara", "Xander",    
-  "Lyra", "Malik", "Aeris", "Finn", "Reyna", "Cassian", "Nolan", "Rowan", "Thorne", "Callista", 
-  "Eirik", "Kira", "Sable", "Zayne", "Darius", "Athena", "Orion", "Zinnia", "Felix", "Lydia", 
-  "Tiberius", "Soren", "Valeria", "Leif", "Aveline", "Magnus", "Octavia", "Draven", "Selene", 
-  "Ignatius", "Lila", "Briar", "Jax", "Ezra", "Kian", "Evangeline", "Thorne", "Rhea", "Amara", 
-  "Nyx", "Oberon", "Tamsin", "Caius", "Ren", "Ivy", "Astrid", "Lucius", "Silas", "Caspian", 
-  "Damien", "Vesper", "Zorin", "Elysia", "Maelis", "Ariadne", "Hawke", "Elowen", "Thalric", 
-  "Zephyr", "Fae", "Jorin", "Talon", "Keira", "Anwen", "Caden", "Sylvie", "Rook", "Elara", 
-  "Cyrus", "Mira", "Duncan", "Galen", "Luca", "Raven", "Calista", "Maris", "Darion", "Lyra", 
-  "Talia", "Dorian", "Rhea", "Kestrel", "Eamon", "Vala", "Wren", "Aeron", "Astra", "Kaida", 
-  "Lucan", "Freya", "Varrick", "Ysabel", "Torin", "Eira", "Ayla", "Corvin", "Ronan", "Blaise", 
+  "Tarique", "Kai", "Hayden", "Charlet", "Tony", "Jim", "Anna", "Uzuri", "Priam", "Eldrin",
+  "Vera", "Lorcan", "Seraphina", "Thalia", "Fenrir", "Marik", "Liora", "Jareth", "Kael", "Sylas",
+  "Isolde", "Garrick", "Nalia", "Borin", "Elara", "Roderick", "Daria", "Joe", "Zara", "Xander",
+  "Lyra", "Malik", "Aeris", "Finn", "Reyna", "Cassian", "Nolan", "Rowan", "Thorne", "Callista",
+  "Eirik", "Kira", "Sable", "Zayne", "Darius", "Athena", "Orion", "Zinnia", "Felix", "Lydia",
+  "Tiberius", "Soren", "Valeria", "Leif", "Aveline", "Magnus", "Octavia", "Draven", "Selene",
+  "Ignatius", "Lila", "Briar", "Jax", "Ezra", "Kian", "Evangeline", "Thorne", "Rhea", "Amara",
+  "Nyx", "Oberon", "Tamsin", "Caius", "Ren", "Ivy", "Astrid", "Lucius", "Silas", "Caspian",
+  "Damien", "Vesper", "Zorin", "Elysia", "Maelis", "Ariadne", "Hawke", "Elowen", "Thalric",
+  "Zephyr", "Fae", "Jorin", "Talon", "Keira", "Anwen", "Caden", "Sylvie", "Rook", "Elara",
+  "Cyrus", "Mira", "Duncan", "Galen", "Luca", "Raven", "Calista", "Maris", "Darion", "Lyra",
+  "Talia", "Dorian", "Rhea", "Kestrel", "Eamon", "Vala", "Wren", "Aeron", "Astra", "Kaida",
+  "Lucan", "Freya", "Varrick", "Ysabel", "Torin", "Eira", "Ayla", "Corvin", "Ronan", "Blaise",
   "Maeve", "Cassiel", "Lorien", "Celia", "Gideon", "Morgana", "Seren", "Alaric", "Inara", "Sabine",
   "Thalrith", "Vox", "Vorn"
 }
@@ -48,18 +48,18 @@ Vars.Titles  = {
 }
 
 Vars.Enemies = {
-  "Zombie", "Reanimated Skeleton", "Ghoul", "Lich", "Banshee", "Vampire", 
-  "Necromancer", "Specter", "Death Knight", "Shadow Revenant", "Possessed Villager", 
-  "Cursed Blacksmith", "Mad Alchemist", "Mutated Farmer", "Haunted Lumberjack", 
-  "Blood-Crazed Merchant", "Doomed Noble", "Cursed Miner", "Corrupted Mage", "Witch", 
-  "Evil Sorcerer", "Demonic Familiar", "Elder Imp", "Fire Elemental", "Ice Elemental", 
-  "Chaos Djinn", "Dark Enchanter", "Voidwalker", "Mana Wraith", "Warlock", "Rogue Knight", 
-  "Bandit", "Assassin", "Thief", "Mercenary Captain", "Shadowblade", "Pirate Captain", 
-  "Dark Ranger", "Traitor Lord", "Cutthroat", "Doom Cultist", "Giant Spider", "Venomous Scorpion", 
-  "Dire Wolf", "Rabid Bat", "Hellhound", "Panther", "Griffon", "Cave Troll", "Rock Golem", 
-  "Thunder Hawk", "Blood Serpent", "Wraith", "Phantom", "Shadowfiend", "Spirit of Vengeance", 
-  "Tormented Soul", "Nightmare Beast", "Lost Soul", "Soul Devourer", "Giant Plague Rat", 
-  "Diseased Vermin", "Plague Bearer", "Rotting Hound", "Pestilent Swarm", "Blighted Boar", "Rot Fiend", 
+  "Zombie", "Reanimated Skeleton", "Ghoul", "Lich", "Banshee", "Vampire",
+  "Necromancer", "Specter", "Death Knight", "Shadow Revenant", "Possessed Villager",
+  "Cursed Blacksmith", "Mad Alchemist", "Mutated Farmer", "Haunted Lumberjack",
+  "Blood-Crazed Merchant", "Doomed Noble", "Cursed Miner", "Corrupted Mage", "Witch",
+  "Evil Sorcerer", "Demonic Familiar", "Elder Imp", "Fire Elemental", "Ice Elemental",
+  "Chaos Djinn", "Dark Enchanter", "Voidwalker", "Mana Wraith", "Warlock", "Rogue Knight",
+  "Bandit", "Assassin", "Thief", "Mercenary Captain", "Shadowblade", "Pirate Captain",
+  "Dark Ranger", "Traitor Lord", "Cutthroat", "Doom Cultist", "Giant Spider", "Venomous Scorpion",
+  "Dire Wolf", "Rabid Bat", "Hellhound", "Panther", "Griffon", "Cave Troll", "Rock Golem",
+  "Thunder Hawk", "Blood Serpent", "Wraith", "Phantom", "Shadowfiend", "Spirit of Vengeance",
+  "Tormented Soul", "Nightmare Beast", "Lost Soul", "Soul Devourer", "Giant Plague Rat",
+  "Diseased Vermin", "Plague Bearer", "Rotting Hound", "Pestilent Swarm", "Blighted Boar", "Rot Fiend",
   "Toxic Sludge", "Walking Corpse", "Carrion Beetle", "Minotaur", "Cyclops", "Gargoyle",
   "Pit Fiend", "Hellspawn", "Infernal Beast", "Demon Lord", "Flame Demon", "Chaos Spawn", "Imp",
   "Bounty Hunter", "Hired Bounty Hunter", "Bloodmage", "Blood Bishop", "Blood Demon", "Master Cultist"
@@ -71,24 +71,24 @@ Vars.Items = {
   "Iron Bracers", "Iron Helmet", "Unlit Lantern", "Bottle of Oil", "Steel Boots", "Steel Leggings",
   "Steel Breastplate", "Steel Bracers", "Steel Helmet", "Unenchanted Ring", "Bag of Sand"
   },
-  Unique = { -- boss/questline loot, cannot be enchanted
-  "Bracers of Elemental Synergy", -- per turn +5-10% damage with 2 random elements
-  "Helmet of Unfailing Intellet", -- +% magic damage
-  "Ring of Elemental Resistance", -- +large% (random element) damage resistance
-  "Heart of The Void" -- powerful, black gemstone that grants a degree of control over darkness and its denziens
+  Unique = { // boss/questline loot, cannot be enchanted
+  "Bracers of Elemental Synergy", // per turn +5-10% damage with 2 random elements
+  "Helmet of Unfailing Intellet", // +% magic damage
+  "Ring of Elemental Resistance", // +large% (random element) damage resistance
+  "Heart of The Void" // powerful, black gemstone that grants a degree of control over darkness and its denziens
   },
-  Materials = { -- for crafting
-    Raw = { -- found through scavaging
+  Materials = { // for crafting
+    Raw = { // found through scavaging
     "Stick", "Quartz", "Raw Iron",
     },
-    Refined = { -- made from raw materials, for equipment
+    Refined = { // made from raw materials, for equipment
     "Iron Ingot", "Steel Plate"
     },
     Rare = {
     "Stardust", "Powdered Magic"
     }
   },
-  Drops = { -- monster loot
+  Drops = { // monster loot
   "Monster Tooth", "Bone", "Magic Powder", "Silk", "Horn", "Venom",
   "Claws", "Hardened Scales", "Beast Blood", "Monster's Eye", "Monster Heart",
   "Silk", "Monster Tendon", "Monster Hide"
@@ -96,8 +96,8 @@ Vars.Items = {
 }
 
 Vars.Events = {
-  "a sudden storm darkens the sky.", 
-  "a stranger approaches you.", 
+  "a sudden storm darkens the sky.",
+  "a stranger approaches you.",
   "an ancient ruin appears on the horizon.",
   "night falls rather quickly, and the shadows seem to close in around you.",
   "you come across a traveling merchant's caravan.",
@@ -107,7 +107,7 @@ Vars.Events = {
 
 Vars.StarterPlayer = {
   Stats = {
-    Strength = {1, 0}, -- stat, modifier, every number above 1 = +0.5%
+    Strength = {1, 0}, // stat, modifier, every number above 1 = +0.5%
     Dexterity = {1, 0},
     Intelligence = {1, 0},
     Toughness = {1, 0}

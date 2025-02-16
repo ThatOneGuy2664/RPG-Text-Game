@@ -49,32 +49,30 @@
             const applyColorFormatting = (text) => {
                 let formattedMessage = "";
                 let currentColor = "white";  // Default color
-
-                // Regular expression to find color tags
-                const colorTagRegex = /\[([A-Za-z]+)\](.*?)\[/g;
+                const colorTagRegex = /\[([a-z]+)\](.*?)(?=\[|$)/g;
                 let match;
+                let lastIndex = 0;
 
-                // Parse the text for color tags and apply formatting
                 while ((match = colorTagRegex.exec(text)) !== null) {
-                    const color = match[1].toUpperCase();  // The color name (e.g., 'RED')
-                    const content = match[2];  // The content to format
+                    formattedMessage += text.slice(lastIndex, match.index); // Add non-tag text
+                    currentColor = match[1];
+                    const content = match[2];
 
-                    // Apply the color to the content and append to the formatted message
-                    if (colorMap[color]) {
-                        currentColor = colorMap[color]; // Update the color for the next part
-                    }
-
-                    formattedMessage += `<span style="color:${currentColor}">${content}</span>`;  // Wrap the content in span with the correct color
+                    formattedMessage += `<span style="color:${currentColor}">${content}</span>`;
+                    lastIndex = colorTagRegex.lastIndex;
                 }
 
-                return formattedMessage;
+                formattedMessage += text.slice(lastIndex);  // Append remaining text
+                return formattedMessage.replace(/\[\]/g, "</span>");  // Close spans for []
             };
 
             const message = args.map(arg => arg.toString()).join(" ");
             const formattedMessage = applyColorFormatting(message);
-            const outputText = `<span style=display:block;">${formattedMessage}</span>`;
+            const outputText = `<br><span>${formattedMessage}</span>`;
+
+            console.log(outputText);
             outputElement.innerHTML += outputText;
-            outputElement.scrollTop = outputElement.scrollHeight; // Auto-scroll to bottom
+            outputElement.scrollTop = outputElement.scrollHeight;
         }
 
         // Function to load and run an external Lua file in the same Lua state (L)

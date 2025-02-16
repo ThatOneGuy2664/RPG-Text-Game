@@ -75,6 +75,9 @@
             outputElement.scrollTop = outputElement.scrollHeight;
         }
 
+        fengari.lua.lua_pushjsfunction(L, customPrint); // Push customPrint function onto the Lua stack
+        fengari.lua.lua_setglobal(L, to_luastring("customPrint")); // Store it in Lua's global table (_G)
+
         // Function to load and run an external Lua file in the same Lua state (L)
         function loadLuaScript(url) {
             fetch(url)
@@ -114,7 +117,7 @@
                     } else {
                         // Retrieve the return value from the Lua stack
                         const returnValue = fengari.lua.lua_tojsstring(L, -1);
-                        customPrint("[blue]> " + returnValue);
+                        customPrint("[cyan]> " + returnValue);
                         // Pop the result from the Lua stack
                         fengari.lua.lua_pop(L, 1);
                     }

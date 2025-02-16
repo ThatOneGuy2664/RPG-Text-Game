@@ -9,12 +9,6 @@ end
 
 _G.processPlayerInput = processPlayerInput  -- Make function accessible globally
 
-local js = require("js")
-
-local function printToConsole(stringToPrint)
-    js.global.customPrint(stringToPrint)
-end
-
 local function intro()
-    printToConsole("[green]Welcome to the game!")
+    customPrint("[green]Welcome to the game!")
 end

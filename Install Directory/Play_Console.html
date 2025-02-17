@@ -32,68 +32,12 @@
 </head>
 <body>
 
-    <h1>Retro RPG Console</h1>
+    <h1>Custom Console RPG</h1>
     <div id="consoleOutput">Welcome to the game!</div>
     <textarea id="luaInput" placeholder="Type your input here..."></textarea>
     <button id="runCommand">Submit</button>
 
     <script>
-        let cachedVars = null; // Store Vars.js data in memory after fetching it once
-
-        async function fetchVars() {
-            if (cachedVars) return cachedVars; // Return cached version if available
-
-            try {
-                const response = await fetch("https://raw.githubusercontent.com/ThatOneGuy2664/RPG-Text-Game/refs/heads/master/Vars.js");
-                const scriptText = await response.text();
-
-                // Execute script and extract Vars object
-                const extractVars = new Function(scriptText + '; return Vars;');
-                cachedVars = extractVars(); // Store Vars in cache
-                return cachedVars;
-            } catch (error) {
-                console.error("Failed to fetch Vars.js:", error);
-                return {};
-            }
-        }
-
-        // Helper function to get a nested property dynamically
-        function getNestedProperty(obj, path) {
-            return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-        }
-
-        async function applyFormatting(text) {
-            const varsData = await fetchVars();
-
-            // Regex for [itemtype:Category.SubCategory]
-            const itemTypeRegex = /\[itemtype:([a-zA-Z0-9_.]+)\]/g;
-
-            text = text.replace(itemTypeRegex, (match, path) => {
-                const itemList = getNestedProperty(varsData.Items, path);
-                if (Array.isArray(itemList) && itemList.length > 0) {
-                    return itemList[Math.floor(Math.random() * itemList.length)];
-                }
-                return "Unknown Item"; // Fallback if path is invalid
-            });
-
-            // Process color tags
-            const colorTagRegex = /\[([a-z]+)\](.*?)(?=\[|$)/g;
-            let formattedMessage = "";
-            let lastIndex = 0;
-            let match;
-
-            while ((match = colorTagRegex.exec(text)) !== null) {
-                formattedMessage += text.slice(lastIndex, match.index); // Add non-tag text
-                const currentColor = match[1];
-                const content = match[2];
-                formattedMessage += `<span style="color:${currentColor}">${content}</span>`;
-                lastIndex = colorTagRegex.lastIndex;
-            }
-
-            formattedMessage += text.slice(lastIndex); // Append remaining text
-            return formattedMessage.replace(/\[\]/g, "</span>"); // Close spans for [color]
-        }
-
         const outputElement = document.getElementById("consoleOutput");
         const inputElement = document.getElementById("luaInput");
         const runButton = document.getElementById("runCommand");
@@ -140,8 +84,6 @@
         // Bind function globally to _G table
         fengari.lua.lua_pushjsfunction(L, luaCustomPrint);
         fengari.lua.lua_setglobal(L, fengari.to_luastring("customPrint"));
-
-        customPrint("[red]You died and lost [itemtype:Regular]");
 
         // Function to load and run an external Lua file in the same Lua state (L)
         function loadLuaScript(url) {
